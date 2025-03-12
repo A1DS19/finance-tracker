@@ -7,16 +7,26 @@
     "dev": "vinxi dev",
     "build": "vinxi build",
     "start": "vinxi start"
-  }, 
+  },
   "keywords": [],
   "author": "jose padilla",
   "license": "ISC",
   "description": "tantracker",
   "dependencies": {
+    "@fontsource/poppins": "^5.2.5",
+    "@radix-ui/react-slot": "^1.1.2",
+    "@tailwindcss/postcss": "^4.0.13",
     "@tanstack/react-router": "^1.114.17",
     "@tanstack/react-start": "^1.114.17",
+    "class-variance-authority": "^0.7.1",
+    "clsx": "^2.1.1",
+    "lucide-react": "^0.479.0",
+    "postcss": "^8.5.3",
     "react": "^19.0.0",
     "react-dom": "^19.0.0",
+    "tailwind-merge": "^3.0.2",
+    "tailwindcss": "^4.0.13",
+    "tailwindcss-animate": "^1.0.7",
     "vinxi": "^0.5.3"
   },
   "devDependencies": {
