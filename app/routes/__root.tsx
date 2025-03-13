@@ -5,7 +5,18 @@ import {
   createRootRoute,
   HeadContent,
   Scripts,
+  Link,
+  useNavigate,
 } from "@tanstack/react-router";
+import { ChartColumnBigIcon } from "lucide-react";
+import {
+  ClerkProvider,
+  SignedOut,
+  SignInButton,
+  SignUpButton,
+  UserButton,
+  SignedIn,
+} from "@clerk/tanstack-start";
 
 import poppins100 from "@fontsource/poppins/100.css?url";
 import poppins200 from "@fontsource/poppins/200.css?url";
@@ -16,6 +27,8 @@ import poppins600 from "@fontsource/poppins/600.css?url";
 import poppins700 from "@fontsource/poppins/700.css?url";
 import poppins800 from "@fontsource/poppins/800.css?url";
 import poppins900 from "@fontsource/poppins/900.css?url";
+import { Button } from "@/components/ui/button";
+import { getSignedInUserId } from "@/data/get-signedin-user-id";
 
 export const Route = createRootRoute({
   head: () => ({
@@ -28,7 +41,7 @@ export const Route = createRootRoute({
         content: "width=device-width, initial-scale=1",
       },
       {
-        title: "TanStack Start Starter",
+        title: "Finance Tracker",
       },
     ],
     links: [
@@ -75,6 +88,17 @@ export const Route = createRootRoute({
     ],
   }),
   component: RootComponent,
+  notFoundComponent() {
+    return (
+      <div className="text-3xl text-center py-10 text-muted-foreground">
+        Oops page not found
+      </div>
+    );
+  },
+  beforeLoad: async () => {
+    const userId = await getSignedInUserId();
+    return { userId };
+  },
 });
 
 function RootComponent() {
@@ -86,15 +110,62 @@ function RootComponent() {
 }
 
 function RootDocument({ children }: Readonly<{ children: ReactNode }>) {
+  const navigate = useNavigate();
+
   return (
-    <html>
-      <head>
-        <HeadContent />
-      </head>
-      <body>
-        {children}
-        <Scripts />
-      </body>
-    </html>
+    <ClerkProvider>
+      <html>
+        <head>
+          <HeadContent />
+        </head>
+        <body>
+          <nav className="bg-primary p-4 h-20 text-white flex items-center justify-between">
+            <Link to="/" className="flex gap-1 items-center font-bold text-2xl">
+              <ChartColumnBigIcon className="text-lime-500" /> FinanceTracker
+            </Link>
+
+            <SignedOut>
+              <div className="text-white flex items-center">
+                <Button
+                  asChild
+                  variant="link"
+                  className="text-white cursor-pointer"
+                >
+                  <SignInButton />
+                </Button>
+
+                <Button
+                  asChild
+                  variant="link"
+                  className="text-white cursor-pointer"
+                >
+                  <SignUpButton />
+                </Button>
+              </div>
+            </SignedOut>
+
+            <SignedIn>
+              <UserButton
+                showName
+                appearance={{
+                  elements: { userButtonOuterIdentifier: { color: "white" } },
+                }}
+              >
+                <UserButton.MenuItems>
+                  <UserButton.Action
+                    label="Dashboard"
+                    labelIcon={<ChartColumnBigIcon size={16} />}
+                    onClick={() => navigate({ to: "/dashboard" })}
+                  />
+                </UserButton.MenuItems>
+              </UserButton>
+            </SignedIn>
+          </nav>
+
+          {children}
+          <Scripts />
+        </body>
+      </html>
+    </ClerkProvider>
   );
 }
