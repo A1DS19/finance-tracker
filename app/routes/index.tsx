@@ -8,7 +8,7 @@ export const Route = createFileRoute("/")({
 function Home() {
   return (
     <>
-      <Button>touch me</Button>
+      <Button className="cursor-pointer">touch me</Button>
     </>
   );
 }
