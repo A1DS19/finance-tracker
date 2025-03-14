@@ -19,6 +19,11 @@ import {
 import { DatePicker } from "./common/datepicker";
 import { Input } from "./ui/input";
 import { Button } from "./ui/button";
+import { getCategories } from "@/data/get-categories";
+
+type TransactionFormProps = {
+  categories: Awaited<ReturnType<typeof getCategories>>; // or for drizzle specific (typeof categoriesTable.$inferSelect)[]
+};
 
 const transactionFormSchema = z.object({
   type: z.enum(["income", "expense"]),
@@ -31,7 +36,7 @@ const transactionFormSchema = z.object({
     .max(300, "Max 300 characters"),
 });
 
-export function TransactionForm() {
+export function TransactionForm({ categories }: TransactionFormProps) {
   const form = useForm<z.infer<typeof transactionFormSchema>>({
     resolver: zodResolver(transactionFormSchema),
     defaultValues: {
@@ -42,6 +47,7 @@ export function TransactionForm() {
       description: "",
     },
   });
+
   const {
     formState: { isSubmitting },
   } = form;
@@ -49,6 +55,10 @@ export function TransactionForm() {
   const handleSubmit = (data: z.infer<typeof transactionFormSchema>) => {
     console.log(data);
   };
+
+  const filteredCategories = categories.filter(
+    (category) => category.type === form.watch("type"),
+  );
 
   return (
     <Form {...form}>
@@ -97,8 +107,16 @@ export function TransactionForm() {
                         <SelectValue placeholder="Category" />
                       </SelectTrigger>
                       <SelectContent>
-                        <SelectItem value="0">Income</SelectItem>
-                        <SelectItem value="1">Expense</SelectItem>
+                        {filteredCategories.map((category) => {
+                          return (
+                            <SelectItem
+                              key={category.id}
+                              value={category.id.toString()}
+                            >
+                              {category.name}
+                            </SelectItem>
+                          );
+                        })}
                       </SelectContent>
                     </Select>
                   </FormControl>
