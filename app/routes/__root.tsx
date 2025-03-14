@@ -17,6 +17,7 @@ import {
   UserButton,
   SignedIn,
 } from "@clerk/tanstack-start";
+import { Toaster } from "@/components/ui/sonner";
 
 import poppins100 from "@fontsource/poppins/100.css?url";
 import poppins200 from "@fontsource/poppins/200.css?url";
@@ -163,6 +164,7 @@ function RootDocument({ children }: Readonly<{ children: ReactNode }>) {
           </nav>
 
           {children}
+          <Toaster richColors />
           <Scripts />
         </body>
       </html>

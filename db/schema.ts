@@ -13,7 +13,7 @@ export const transactionsTable = pgTable("transactions", {
   userId: text("user_id").notNull(),
   description: text().notNull(),
   amount: numeric().notNull(),
-  transaction_date: date("transaction_date").notNull(),
+  transactionDate: date("transaction_date").notNull(),
   categoryId: integer("category_id")
     .references(() => categoriesTable.id)
     .notNull(),

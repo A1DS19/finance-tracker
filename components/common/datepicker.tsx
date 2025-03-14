@@ -1,29 +1,29 @@
-import { Popover, PopoverTrigger, PopoverContent } from "../ui/popover";
-import { Button } from "../ui/button";
-import { Calendar } from "../ui/calendar";
-import { CalendarIcon } from "lucide-react";
 import { format } from "date-fns";
-import { cn } from "lib/utils";
+import {
+  Popover,
+  PopoverTrigger,
+  PopoverContent,
+} from "@/components/ui/popover";
+import { Calendar } from "@/components/ui/calendar";
+import { Input } from "@/components/ui/input";
 
 type DatePickerProps = {
-  value: Date;
-  onChange: () => void;
+  value: Date | undefined;
+  onChange: (date: Date | undefined) => void;
 };
 
 export function DatePicker({ value, onChange }: DatePickerProps) {
   return (
     <Popover>
       <PopoverTrigger asChild>
-        <Button
-          variant={"outline"}
-          className={cn(
-            "justify-start text-left font-normal w-full",
-            !value && "text-muted-foreground",
-          )}
-        >
-          <CalendarIcon />
-          {value ? format(value, "PPP") : <span>Pick a date</span>}
-        </Button>
+        <div className="relative flex items-center">
+          <Input
+            readOnly
+            value={value ? format(value, "PPP") : ""}
+            placeholder="Pick a date"
+            className="pr-10 cursor-pointer flex items-center"
+          />
+        </div>
       </PopoverTrigger>
       <PopoverContent className="w-auto p-0">
         <Calendar
@@ -31,9 +31,7 @@ export function DatePicker({ value, onChange }: DatePickerProps) {
           selected={value}
           onSelect={onChange}
           initialFocus
-          disabled={{
-            after: new Date(),
-          }}
+          disabled={{ after: new Date() }}
         />
       </PopoverContent>
     </Popover>

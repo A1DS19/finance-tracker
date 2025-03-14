@@ -20,15 +20,17 @@ import { DatePicker } from "./common/datepicker";
 import { Input } from "./ui/input";
 import { Button } from "./ui/button";
 import { getCategories } from "@/data/get-categories";
+import { addDays } from "date-fns";
 
 type TransactionFormProps = {
   categories: Awaited<ReturnType<typeof getCategories>>; // or for drizzle specific (typeof categoriesTable.$inferSelect)[]
+  onSubmit: (data: z.infer<typeof transactionFormSchema>) => Promise<void>;
 };
 
-const transactionFormSchema = z.object({
+export const transactionFormSchema = z.object({
   type: z.enum(["income", "expense"]),
   categoryId: z.coerce.number().positive("Select a category"),
-  date: z.date().max(new Date(), "Date cannot be in the future"),
+  date: z.date().max(addDays(new Date(), 1), "Date cannot be in the future"),
   amount: z.coerce.number().positive("Amount is required"),
   description: z
     .string()
@@ -36,7 +38,10 @@ const transactionFormSchema = z.object({
     .max(300, "Max 300 characters"),
 });
 
-export function TransactionForm({ categories }: TransactionFormProps) {
+export function TransactionForm({
+  categories,
+  onSubmit,
+}: TransactionFormProps) {
   const form = useForm<z.infer<typeof transactionFormSchema>>({
     resolver: zodResolver(transactionFormSchema),
     defaultValues: {
@@ -52,17 +57,13 @@ export function TransactionForm({ categories }: TransactionFormProps) {
     formState: { isSubmitting },
   } = form;
 
-  const handleSubmit = (data: z.infer<typeof transactionFormSchema>) => {
-    console.log(data);
-  };
-
   const filteredCategories = categories.filter(
     (category) => category.type === form.watch("type"),
   );
 
   return (
     <Form {...form}>
-      <form onSubmit={form.handleSubmit(handleSubmit)}>
+      <form onSubmit={form.handleSubmit(onSubmit)}>
         <fieldset
           className="grid grid-cols-2 gap-y-5 gap-x-2"
           disabled={isSubmitting}
