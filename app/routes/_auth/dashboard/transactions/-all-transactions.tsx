@@ -6,6 +6,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "components/ui/select";
+import { Badge } from "components/ui/badge";
 import {
   Table,
   TableBody,
@@ -14,6 +15,7 @@ import {
   TableHeader,
   TableRow,
 } from "components/ui/table";
+import numeral from "numeral";
 import { format } from "date-fns";
 import { useState } from "react";
 import { Button } from "components/ui/button";
@@ -119,9 +121,17 @@ export function AllTransactions({
                       {format(transaction.transactionDate, "do MMM yyyy")}
                     </TableCell>
                     <TableCell>{transaction.description}</TableCell>
-                    <TableCell>{transaction.transactionType}</TableCell>
+                    <TableCell>
+                      <Badge
+                        className={`${transaction.transactionType == "income" ? "bg-green-500" : transaction.transactionType === "expense" ? "bg-red-500" : ""}`}
+                      >
+                        {transaction.transactionType}
+                      </Badge>
+                    </TableCell>
                     <TableCell>{transaction.category}</TableCell>
-                    <TableCell>{transaction.amount}</TableCell>
+                    <TableCell>
+                      {numeral(transaction.amount).format("0,0[.]00")}
+                    </TableCell>
                     <TableCell className="text-right">
                       <Button asChild variant="outline">
                         <Link to="/dashboard/transactions/new">
