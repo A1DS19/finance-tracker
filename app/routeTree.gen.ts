@@ -19,7 +19,9 @@ import { Route as AuthDashboardIndexImport } from './routes/_auth/dashboard/inde
 import { Route as AuthDashboardTransactionsLayoutImport } from './routes/_auth/dashboard/transactions/_layout'
 import { Route as AuthDashboardTransactionsLayoutIndexImport } from './routes/_auth/dashboard/transactions/_layout.index'
 import { Route as AuthDashboardTransactionsNewLayoutImport } from './routes/_auth/dashboard/transactions/new/_layout'
+import { Route as AuthDashboardTransactionsTransactionIdLayoutImport } from './routes/_auth/dashboard/transactions/$transactionId/_layout'
 import { Route as AuthDashboardTransactionsNewLayoutIndexImport } from './routes/_auth/dashboard/transactions/new/_layout.index'
+import { Route as AuthDashboardTransactionsTransactionIdLayoutIndexImport } from './routes/_auth/dashboard/transactions/$transactionId/_layout.index'
 
 // Create Virtual Routes
 
@@ -28,6 +30,9 @@ const AuthDashboardTransactionsImport = createFileRoute(
 )()
 const AuthDashboardTransactionsNewImport = createFileRoute(
   '/_auth/dashboard/transactions/new',
+)()
+const AuthDashboardTransactionsTransactionIdImport = createFileRoute(
+  '/_auth/dashboard/transactions/$transactionId',
 )()
 
 // Create/Update Routes
@@ -62,6 +67,13 @@ const AuthDashboardTransactionsNewRoute =
     getParentRoute: () => AuthDashboardTransactionsRoute,
   } as any)
 
+const AuthDashboardTransactionsTransactionIdRoute =
+  AuthDashboardTransactionsTransactionIdImport.update({
+    id: '/$transactionId',
+    path: '/$transactionId',
+    getParentRoute: () => AuthDashboardTransactionsRoute,
+  } as any)
+
 const AuthDashboardTransactionsLayoutRoute =
   AuthDashboardTransactionsLayoutImport.update({
     id: '/_layout',
@@ -81,11 +93,24 @@ const AuthDashboardTransactionsNewLayoutRoute =
     getParentRoute: () => AuthDashboardTransactionsNewRoute,
   } as any)
 
+const AuthDashboardTransactionsTransactionIdLayoutRoute =
+  AuthDashboardTransactionsTransactionIdLayoutImport.update({
+    id: '/_layout',
+    getParentRoute: () => AuthDashboardTransactionsTransactionIdRoute,
+  } as any)
+
 const AuthDashboardTransactionsNewLayoutIndexRoute =
   AuthDashboardTransactionsNewLayoutIndexImport.update({
     id: '/',
     path: '/',
     getParentRoute: () => AuthDashboardTransactionsNewLayoutRoute,
+  } as any)
+
+const AuthDashboardTransactionsTransactionIdLayoutIndexRoute =
+  AuthDashboardTransactionsTransactionIdLayoutIndexImport.update({
+    id: '/',
+    path: '/',
+    getParentRoute: () => AuthDashboardTransactionsTransactionIdLayoutRoute,
   } as any)
 
 // Populate the FileRoutesByPath interface
@@ -127,6 +152,20 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthDashboardTransactionsLayoutImport
       parentRoute: typeof AuthDashboardTransactionsRoute
     }
+    '/_auth/dashboard/transactions/$transactionId': {
+      id: '/_auth/dashboard/transactions/$transactionId'
+      path: '/$transactionId'
+      fullPath: '/dashboard/transactions/$transactionId'
+      preLoaderRoute: typeof AuthDashboardTransactionsTransactionIdImport
+      parentRoute: typeof AuthDashboardTransactionsImport
+    }
+    '/_auth/dashboard/transactions/$transactionId/_layout': {
+      id: '/_auth/dashboard/transactions/$transactionId/_layout'
+      path: '/$transactionId'
+      fullPath: '/dashboard/transactions/$transactionId'
+      preLoaderRoute: typeof AuthDashboardTransactionsTransactionIdLayoutImport
+      parentRoute: typeof AuthDashboardTransactionsTransactionIdRoute
+    }
     '/_auth/dashboard/transactions/new': {
       id: '/_auth/dashboard/transactions/new'
       path: '/new'
@@ -147,6 +186,13 @@ declare module '@tanstack/react-router' {
       fullPath: '/dashboard/transactions/'
       preLoaderRoute: typeof AuthDashboardTransactionsLayoutIndexImport
       parentRoute: typeof AuthDashboardTransactionsLayoutImport
+    }
+    '/_auth/dashboard/transactions/$transactionId/_layout/': {
+      id: '/_auth/dashboard/transactions/$transactionId/_layout/'
+      path: '/'
+      fullPath: '/dashboard/transactions/$transactionId/'
+      preLoaderRoute: typeof AuthDashboardTransactionsTransactionIdLayoutIndexImport
+      parentRoute: typeof AuthDashboardTransactionsTransactionIdLayoutImport
     }
     '/_auth/dashboard/transactions/new/_layout/': {
       id: '/_auth/dashboard/transactions/new/_layout/'
@@ -173,6 +219,36 @@ const AuthDashboardTransactionsLayoutRouteChildren: AuthDashboardTransactionsLay
 const AuthDashboardTransactionsLayoutRouteWithChildren =
   AuthDashboardTransactionsLayoutRoute._addFileChildren(
     AuthDashboardTransactionsLayoutRouteChildren,
+  )
+
+interface AuthDashboardTransactionsTransactionIdLayoutRouteChildren {
+  AuthDashboardTransactionsTransactionIdLayoutIndexRoute: typeof AuthDashboardTransactionsTransactionIdLayoutIndexRoute
+}
+
+const AuthDashboardTransactionsTransactionIdLayoutRouteChildren: AuthDashboardTransactionsTransactionIdLayoutRouteChildren =
+  {
+    AuthDashboardTransactionsTransactionIdLayoutIndexRoute:
+      AuthDashboardTransactionsTransactionIdLayoutIndexRoute,
+  }
+
+const AuthDashboardTransactionsTransactionIdLayoutRouteWithChildren =
+  AuthDashboardTransactionsTransactionIdLayoutRoute._addFileChildren(
+    AuthDashboardTransactionsTransactionIdLayoutRouteChildren,
+  )
+
+interface AuthDashboardTransactionsTransactionIdRouteChildren {
+  AuthDashboardTransactionsTransactionIdLayoutRoute: typeof AuthDashboardTransactionsTransactionIdLayoutRouteWithChildren
+}
+
+const AuthDashboardTransactionsTransactionIdRouteChildren: AuthDashboardTransactionsTransactionIdRouteChildren =
+  {
+    AuthDashboardTransactionsTransactionIdLayoutRoute:
+      AuthDashboardTransactionsTransactionIdLayoutRouteWithChildren,
+  }
+
+const AuthDashboardTransactionsTransactionIdRouteWithChildren =
+  AuthDashboardTransactionsTransactionIdRoute._addFileChildren(
+    AuthDashboardTransactionsTransactionIdRouteChildren,
   )
 
 interface AuthDashboardTransactionsNewLayoutRouteChildren {
@@ -207,6 +283,7 @@ const AuthDashboardTransactionsNewRouteWithChildren =
 
 interface AuthDashboardTransactionsRouteChildren {
   AuthDashboardTransactionsLayoutRoute: typeof AuthDashboardTransactionsLayoutRouteWithChildren
+  AuthDashboardTransactionsTransactionIdRoute: typeof AuthDashboardTransactionsTransactionIdRouteWithChildren
   AuthDashboardTransactionsNewRoute: typeof AuthDashboardTransactionsNewRouteWithChildren
 }
 
@@ -214,6 +291,8 @@ const AuthDashboardTransactionsRouteChildren: AuthDashboardTransactionsRouteChil
   {
     AuthDashboardTransactionsLayoutRoute:
       AuthDashboardTransactionsLayoutRouteWithChildren,
+    AuthDashboardTransactionsTransactionIdRoute:
+      AuthDashboardTransactionsTransactionIdRouteWithChildren,
     AuthDashboardTransactionsNewRoute:
       AuthDashboardTransactionsNewRouteWithChildren,
   }
@@ -240,8 +319,10 @@ export interface FileRoutesByFullPath {
   '': typeof AuthRouteWithChildren
   '/dashboard': typeof AuthDashboardIndexRoute
   '/dashboard/transactions': typeof AuthDashboardTransactionsLayoutRouteWithChildren
+  '/dashboard/transactions/$transactionId': typeof AuthDashboardTransactionsTransactionIdLayoutRouteWithChildren
   '/dashboard/transactions/new': typeof AuthDashboardTransactionsNewLayoutRouteWithChildren
   '/dashboard/transactions/': typeof AuthDashboardTransactionsLayoutIndexRoute
+  '/dashboard/transactions/$transactionId/': typeof AuthDashboardTransactionsTransactionIdLayoutIndexRoute
   '/dashboard/transactions/new/': typeof AuthDashboardTransactionsNewLayoutIndexRoute
 }
 
@@ -250,6 +331,7 @@ export interface FileRoutesByTo {
   '': typeof AuthRouteWithChildren
   '/dashboard': typeof AuthDashboardIndexRoute
   '/dashboard/transactions': typeof AuthDashboardTransactionsLayoutIndexRoute
+  '/dashboard/transactions/$transactionId': typeof AuthDashboardTransactionsTransactionIdLayoutIndexRoute
   '/dashboard/transactions/new': typeof AuthDashboardTransactionsNewLayoutIndexRoute
 }
 
@@ -260,9 +342,12 @@ export interface FileRoutesById {
   '/_auth/dashboard/': typeof AuthDashboardIndexRoute
   '/_auth/dashboard/transactions': typeof AuthDashboardTransactionsRouteWithChildren
   '/_auth/dashboard/transactions/_layout': typeof AuthDashboardTransactionsLayoutRouteWithChildren
+  '/_auth/dashboard/transactions/$transactionId': typeof AuthDashboardTransactionsTransactionIdRouteWithChildren
+  '/_auth/dashboard/transactions/$transactionId/_layout': typeof AuthDashboardTransactionsTransactionIdLayoutRouteWithChildren
   '/_auth/dashboard/transactions/new': typeof AuthDashboardTransactionsNewRouteWithChildren
   '/_auth/dashboard/transactions/new/_layout': typeof AuthDashboardTransactionsNewLayoutRouteWithChildren
   '/_auth/dashboard/transactions/_layout/': typeof AuthDashboardTransactionsLayoutIndexRoute
+  '/_auth/dashboard/transactions/$transactionId/_layout/': typeof AuthDashboardTransactionsTransactionIdLayoutIndexRoute
   '/_auth/dashboard/transactions/new/_layout/': typeof AuthDashboardTransactionsNewLayoutIndexRoute
 }
 
@@ -273,8 +358,10 @@ export interface FileRouteTypes {
     | ''
     | '/dashboard'
     | '/dashboard/transactions'
+    | '/dashboard/transactions/$transactionId'
     | '/dashboard/transactions/new'
     | '/dashboard/transactions/'
+    | '/dashboard/transactions/$transactionId/'
     | '/dashboard/transactions/new/'
   fileRoutesByTo: FileRoutesByTo
   to:
@@ -282,6 +369,7 @@ export interface FileRouteTypes {
     | ''
     | '/dashboard'
     | '/dashboard/transactions'
+    | '/dashboard/transactions/$transactionId'
     | '/dashboard/transactions/new'
   id:
     | '__root__'
@@ -290,9 +378,12 @@ export interface FileRouteTypes {
     | '/_auth/dashboard/'
     | '/_auth/dashboard/transactions'
     | '/_auth/dashboard/transactions/_layout'
+    | '/_auth/dashboard/transactions/$transactionId'
+    | '/_auth/dashboard/transactions/$transactionId/_layout'
     | '/_auth/dashboard/transactions/new'
     | '/_auth/dashboard/transactions/new/_layout'
     | '/_auth/dashboard/transactions/_layout/'
+    | '/_auth/dashboard/transactions/$transactionId/_layout/'
     | '/_auth/dashboard/transactions/new/_layout/'
   fileRoutesById: FileRoutesById
 }
@@ -340,6 +431,7 @@ export const routeTree = rootRoute
       "parent": "/_auth",
       "children": [
         "/_auth/dashboard/transactions/_layout",
+        "/_auth/dashboard/transactions/$transactionId",
         "/_auth/dashboard/transactions/new"
       ]
     },
@@ -348,6 +440,20 @@ export const routeTree = rootRoute
       "parent": "/_auth/dashboard/transactions",
       "children": [
         "/_auth/dashboard/transactions/_layout/"
+      ]
+    },
+    "/_auth/dashboard/transactions/$transactionId": {
+      "filePath": "_auth/dashboard/transactions/$transactionId",
+      "parent": "/_auth/dashboard/transactions",
+      "children": [
+        "/_auth/dashboard/transactions/$transactionId/_layout"
+      ]
+    },
+    "/_auth/dashboard/transactions/$transactionId/_layout": {
+      "filePath": "_auth/dashboard/transactions/$transactionId/_layout.tsx",
+      "parent": "/_auth/dashboard/transactions/$transactionId",
+      "children": [
+        "/_auth/dashboard/transactions/$transactionId/_layout/"
       ]
     },
     "/_auth/dashboard/transactions/new": {
@@ -367,6 +473,10 @@ export const routeTree = rootRoute
     "/_auth/dashboard/transactions/_layout/": {
       "filePath": "_auth/dashboard/transactions/_layout.index.tsx",
       "parent": "/_auth/dashboard/transactions/_layout"
+    },
+    "/_auth/dashboard/transactions/$transactionId/_layout/": {
+      "filePath": "_auth/dashboard/transactions/$transactionId/_layout.index.tsx",
+      "parent": "/_auth/dashboard/transactions/$transactionId/_layout"
     },
     "/_auth/dashboard/transactions/new/_layout/": {
       "filePath": "_auth/dashboard/transactions/new/_layout.index.tsx",

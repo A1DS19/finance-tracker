@@ -21,10 +21,12 @@ import { Input } from "./ui/input";
 import { Button } from "./ui/button";
 import { getCategories } from "@/data/get-categories";
 import { addDays } from "date-fns";
+import { getTransaction } from "@/data/get-transaction";
 
 type TransactionFormProps = {
   categories: Awaited<ReturnType<typeof getCategories>>; // or for drizzle specific (typeof categoriesTable.$inferSelect)[]
   onSubmit: (data: z.infer<typeof transactionFormSchema>) => Promise<void>;
+  defaultValues?: Awaited<ReturnType<typeof getTransaction>>;
 };
 
 export const transactionFormSchema = z.object({
@@ -41,6 +43,7 @@ export const transactionFormSchema = z.object({
 export function TransactionForm({
   categories,
   onSubmit,
+  defaultValues,
 }: TransactionFormProps) {
   const form = useForm<z.infer<typeof transactionFormSchema>>({
     resolver: zodResolver(transactionFormSchema),
@@ -50,6 +53,7 @@ export function TransactionForm({
       date: new Date(),
       amount: 0,
       description: "",
+      ...defaultValues,
     },
   });
 

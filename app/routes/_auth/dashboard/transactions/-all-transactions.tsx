@@ -19,7 +19,7 @@ import numeral from "numeral";
 import { format } from "date-fns";
 import { useState } from "react";
 import { Button } from "components/ui/button";
-import { Link } from "@tanstack/react-router";
+import { Link, useRouter } from "@tanstack/react-router";
 import { getTransactionsByMonth } from "@/data/get-transactions-by-month";
 import { Pencil } from "lucide-react";
 
@@ -39,6 +39,7 @@ export function AllTransactions({
   const selectedDate = new Date(year, month - 1, 1);
   const [selectedYear, setSelectedYear] = useState(year);
   const [selectedMonth, setSelectedMonth] = useState(month);
+  const router = useRouter();
 
   return (
     <Card className="mt-4">
@@ -134,7 +135,16 @@ export function AllTransactions({
                     </TableCell>
                     <TableCell className="text-right">
                       <Button asChild variant="outline">
-                        <Link to="/dashboard/transactions/new">
+                        <Link
+                          onClick={() => {
+                            router.clearCache({
+                              filter: (route) =>
+                                route.pathname !=
+                                `/dashboard/transactions${transaction.id}`,
+                            });
+                          }}
+                          to={`/dashboard/transactions/${transaction.id}`}
+                        >
                           <Pencil />
                         </Link>
                       </Button>
