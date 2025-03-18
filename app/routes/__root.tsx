@@ -100,6 +100,7 @@ export const Route = createRootRoute({
     const userId = await getSignedInUserId();
     return { userId };
   },
+  pendingMs: 0,
 });
 
 function RootComponent() {
@@ -149,7 +150,12 @@ function RootDocument({ children }: Readonly<{ children: ReactNode }>) {
               <UserButton
                 showName
                 appearance={{
-                  elements: { userButtonOuterIdentifier: { color: "white" } },
+                  elements: {
+                    userButtonOuterIdentifier: { color: "white" },
+                    userButtonAvatarBox: {
+                      border: "1px solid white",
+                    },
+                  },
                 }}
               >
                 <UserButton.MenuItems>

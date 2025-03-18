@@ -5,6 +5,7 @@ import { getAnnualCashflow } from "@/data/get-annual-cashflow";
 import { Cashflow } from "./-cashflow";
 import { getTransactionYearsRange } from "@/data/get-transactions-years-range";
 import { z } from "zod";
+import { LoadingSkeleton } from "@/components/loading-skeleton";
 
 const today = new Date();
 const searchSchema = z.object({
@@ -19,6 +20,7 @@ const searchSchema = z.object({
 export const Route = createFileRoute("/_auth/dashboard/")({
   component: RouteComponent,
   validateSearch: searchSchema,
+  pendingComponent: () => <LoadingSkeleton />,
   loaderDeps: ({ search }) => {
     return {
       year: search.year,
